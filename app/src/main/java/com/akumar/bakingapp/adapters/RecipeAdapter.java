@@ -1,7 +1,8 @@
-package com.akumar.adapters;
+package com.akumar.bakingapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.akumar.Utilities.RecipeList;
+import com.akumar.bakingapp.Utilities.Recipe;
+import com.akumar.bakingapp.Utilities.RecipeList;
 import com.akumar.bakingapp.DetailActivity;
-import com.akumar.bakingapp.MainActivity;
 import com.android.bakingapp.R;
 
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ import java.util.ArrayList;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<RecipeList> recipeList;
+    ArrayList<Recipe> recipeList;
 
-    public RecipeAdapter(Context context, ArrayList<RecipeList> recipeList) {
+    public RecipeAdapter(Context context, ArrayList<Recipe> recipeList) {
         this.context = context;
         this.recipeList = recipeList;
     }
@@ -45,6 +46,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("id",recipeList.get(position).getId());
+                bundle.putString("name",recipeList.get(position).getName());
+                bundle.putInt("position",position);
+                bundle.putInt("servingSize",recipeList.get(position).getServings());
+                bundle.putParcelableArrayList("ingredients",recipeList.get(position).getIngredients());
+                bundle.putParcelableArrayList("steps",recipeList.get(position).getSteps());
+                intent.putExtras(bundle);
 
                 context.startActivity(intent);
             }
