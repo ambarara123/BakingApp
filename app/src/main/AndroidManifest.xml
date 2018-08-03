@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.akumar.bakingapp.DetailActivity" />
-        <activity android:name="com.akumar.bakingapp.IngredientActivity"></activity>
+        <activity android:name="com.akumar.bakingapp.IngredientActivity" />
+        <activity android:name="com.akumar.bakingapp.DescriptionActivity"></activity>
     </application>
 
 </manifest>
