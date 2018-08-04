@@ -1,6 +1,7 @@
 package com.akumar.bakingapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.akumar.bakingapp.Utilities.Recipe;
@@ -23,8 +25,6 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
-    StepsFragment stepsFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +32,39 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
 
-
         Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
+
+            Bundle bundle = intent.getExtras();
+
+
+            this.setTitle(bundle.getString("name"));
+
+
+
+
+        /*if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }*/
+
 
 
         fragmentManager = getSupportFragmentManager();
 
-        stepsFragment = new StepsFragment();
-        stepsFragment.setArguments(bundle);
+        if (savedInstanceState == null){
 
-        fragmentManager.beginTransaction().add(R.id.detail_fragment, stepsFragment
-                ,"step_fragment")
-                .commit();
+            StepsFragment stepsFragment = new StepsFragment();
+            stepsFragment.setArguments(bundle);
+
+            fragmentManager.beginTransaction().add(R.id.detail_fragment,stepsFragment,
+            "step_fragment")
+                    .commit();
+
+        }
+
+
 
     }
 
@@ -52,8 +72,8 @@ public class DetailActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-
-        getSupportFragmentManager().putFragment(outState,"step_fragment", stepsFragment);
+/*
+        getSupportFragmentManager().putFragment(outState,"step_fragment", stepsFragment);*/
 
     }
 }

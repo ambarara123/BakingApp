@@ -81,12 +81,17 @@ public class DescriptionFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_description, container, false);
         simpleExoPlayerView = view.findViewById(R.id.exoPlayer);
 
+        Bundle bundle = getArguments();
+
+
+
         if (savedInstanceState != null){
             stepsArrayList = savedInstanceState.getParcelableArrayList("save_list");
             position = savedInstanceState.getInt("save_posn");
+            cursorPosition = savedInstanceState.getLong("cur_posn");
 
         }else{
-            Bundle bundle = getArguments();
+
             position = bundle.getInt("step_position");
             stepsArrayList = bundle.getParcelableArrayList("step_arraylist");
 
@@ -94,8 +99,10 @@ public class DescriptionFragment extends Fragment {
         }
 
 
-        shortDes = (TextView) view.findViewById(R.id.recipe_short);
-       description = (TextView) view.findViewById(R.id.recipe_description);
+
+        shortDes =  view.findViewById(R.id.recipe_short);
+        description =  view.findViewById(R.id.recipe_description);
+
 
 
         if (simpleExoPlayer == null) {
@@ -107,6 +114,35 @@ public class DescriptionFragment extends Fragment {
         simpleExoPlayer.prepare(mediaSource);
         simpleExoPlayer.setPlayWhenReady(true);
 
+        int configuration = getResources().getConfiguration().orientation;
+
+        if(configuration == Configuration.ORIENTATION_LANDSCAPE){
+
+            Log.d("config","changed config");
+
+
+
+            if (!stepsArrayList.get(position).getVideoURL().isEmpty()) {
+
+                shortDes.setVisibility(View.GONE);
+
+
+                description.setVisibility(View.GONE);
+
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+                params.width = params.MATCH_PARENT;
+                params.height = params.MATCH_PARENT;
+
+                simpleExoPlayerView.setLayoutParams(params);
+            }else {
+                shortDes.setVisibility(View.VISIBLE);
+                description.setVisibility(View.VISIBLE);
+            }
+
+        }else {
+
+
+        }
 
 
         if (stepsArrayList != null) {
@@ -240,51 +276,7 @@ public class DescriptionFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Log.d("config","changed config");
 
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-            shortDes.setVisibility(View.GONE);
-            description.setVisibility(View.GONE);
-
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=params.MATCH_PARENT;
-            params.bottomMargin = 5;
-            simpleExoPlayerView.setLayoutParams(params);
-
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-
-            shortDes.setVisibility(View.VISIBLE);
-            description.setVisibility(View.VISIBLE);
-
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=250;
-            simpleExoPlayerView.setLayoutParams(params);
-        }
-    }
-
-
-    /*private void openFullscreenDialog() {
-
-        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
-        dialog.addContentView(simpleExoPlayerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mExoPlayerFullscreen = true;
-        dialog.show();
-    }
-
-
-    private void closeFullscreenDialog() {
-
-        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
-        ((LinearLayout) findViewById(R.id.linearLayoutContainer)).addView(simpleExoPlayerView);
-        mExoPlayerFullscreen = false;
-        dialog.dismiss();
-    }*/
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -292,6 +284,7 @@ public class DescriptionFragment extends Fragment {
 
         outState.putInt("save_posn",position);
         outState.putParcelableArrayList("save_list",stepsArrayList);
+        outState.putLong("cur_posn",cursorPosition);
 
     }
 }

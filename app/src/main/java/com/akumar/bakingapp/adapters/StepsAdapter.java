@@ -51,6 +51,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
                 bundle.putParcelableArrayList("step_arraylist",steps);
                 bundle.putInt("step_position",position);
 
+
                 descriptionFragment.setArguments(bundle);
 
                 fragmentManager.beginTransaction().replace(R.id.detail_fragment, descriptionFragment,

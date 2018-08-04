@@ -1,5 +1,7 @@
 package com.akumar.bakingapp.adapters;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.akumar.bakingapp.Utilities.Recipe;
 import com.akumar.bakingapp.Utilities.RecipeList;
 import com.akumar.bakingapp.DetailActivity;
+import com.akumar.bakingapp.widgets.Widget;
 import com.android.bakingapp.R;
 
 import java.util.ArrayList;
@@ -56,6 +59,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                 intent.putExtras(bundle);
 
                 context.startActivity(intent);
+
+                //Update Widget
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, Widget.class));
+                Widget.updateFromAdapter(context, appWidgetManager, appWidgetIds, position, recipeList);
             }
         });
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.akumar.bakingapp.Utilities.Recipe;
+import com.akumar.bakingapp.adapters.IngradientAdapter;
 import com.akumar.bakingapp.adapters.StepsAdapter;
 import com.android.bakingapp.R;
 
@@ -31,6 +32,11 @@ public class StepsFragment extends Fragment {
     @BindView(R.id.stepRecyclerView)
     RecyclerView stepRecyclerView;
     @BindView(R.id.ingradientCard)CardView ingradientCard;
+    @BindView(R.id.ingradientRecycler)
+    RecyclerView ingradientRecycler;
+    IngradientAdapter ingradientAdapter;
+
+
 
     StepsAdapter stepsAdapter;
     FragmentManager fragmentManager;
@@ -59,11 +65,17 @@ public class StepsFragment extends Fragment {
         ingredientsList = bundle.getParcelableArrayList("ingredients");
         stepsList = bundle.getParcelableArrayList("steps");
 
+
+        ingradientAdapter = new IngradientAdapter(getContext(),ingredientsList);
+        ingradientRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        ingradientRecycler.setHasFixedSize(true);
+        ingradientRecycler.setAdapter(ingradientAdapter);
+
         stepsAdapter = new StepsAdapter(getContext(),stepsList,fragmentManager);
         stepRecyclerView.setAdapter(stepsAdapter);
 
 
-        ingradientCard.setOnClickListener(new View.OnClickListener() {
+       /* ingradientCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), IngredientActivity.class);
@@ -73,7 +85,7 @@ public class StepsFragment extends Fragment {
 
             }
         });
-
+*/
 
         return view;
     }

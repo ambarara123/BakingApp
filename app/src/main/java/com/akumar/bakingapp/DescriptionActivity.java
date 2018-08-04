@@ -32,10 +32,6 @@ public class DescriptionActivity extends AppCompatActivity {
 
 
 
-
-
-
-
         Log.d("steps",stepsArrayList.get(position).getVideoURL());
     }
 }

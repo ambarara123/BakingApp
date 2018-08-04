@@ -11,6 +11,7 @@
     android:orientation="vertical"
     tools:context=".DescriptionFragment">
 
+
     <TextView
         android:id="@+id/recipe_short"
         android:layout_width="wrap_content"
@@ -75,4 +76,5 @@
         android:layout_height="wrap_content"
         android:text="NEXT"
         android:visibility="invisible" />
+
 </LinearLayout>

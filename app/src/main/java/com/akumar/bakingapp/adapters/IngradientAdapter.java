@@ -26,7 +26,7 @@ public class IngradientAdapter extends RecyclerView.Adapter<IngradientAdapter.Vi
     @NonNull
     @Override
     public IngradientAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.step_list,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.ingradient_list,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -48,7 +48,7 @@ public class IngradientAdapter extends RecyclerView.Adapter<IngradientAdapter.Vi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            stepName = itemView.findViewById(R.id.stepName);
+            stepName = itemView.findViewById(R.id.ingradientName);
         }
     }
 }
