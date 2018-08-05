@@ -25,7 +25,6 @@
                 android:value="com.akumar.bakingapp.MainActivity" />
 
         </activity>
-        <activity android:name="com.akumar.bakingapp.DescriptionActivity"></activity>
 
 
         <receiver android:name="com.akumar.bakingapp.widgets.Widget">

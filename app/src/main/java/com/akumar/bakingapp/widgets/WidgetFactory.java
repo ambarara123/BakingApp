@@ -30,7 +30,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     Context context;
     ArrayList<Recipe> recipes;
 
-    public WidgetFactory(Context context, Intent intent) {
+    public WidgetFactory(Context context) {
         this.context = context;
 
     }
@@ -55,24 +55,31 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public int getCount() {
 
-        return recipes.size();
-
+        if (recipes!=null) {
+            return recipes.size();
+        }else {
+            return 0;
+        }
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list);
+
+
         Recipe recipe = recipes.get(position);
         ArrayList<Recipe.Ingredients> ingredients = recipe.ingredients;
-        String x = "";
-        int i = 0;
+        String text = "";
+
+
+
         for (Recipe.Ingredients ingredient : ingredients) {
-            x = x + (++i) + ". " + ingredient.getIngredient()+ " \n";
+            text = text + ingredient.getIngredient()+ " \n";
         }
 
 
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_list);
         remoteViews.setTextViewText(R.id.textWidget, recipe.getName());
-        remoteViews.setTextViewText(R.id.textWidget1, x);
+        remoteViews.setTextViewText(R.id.textWidget1, text);
 
         return remoteViews;
     }

@@ -3,22 +3,23 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    android:background="#f5e0e0">
 
     <TextView
         android:padding="8dp"
         android:id="@+id/widget_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#212121"
+        android:textColor="#f5cece"
         android:textSize="17sp"
         style="@style/TextAppearance.AppCompat.Large"
-        android:background="@color/colorPrimary"
+        android:background="#6e7c5a"
         />
     <TextView
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="10dp"
         android:id="@+id/list_text"
         />
 

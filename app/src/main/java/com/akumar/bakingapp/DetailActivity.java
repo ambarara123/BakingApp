@@ -26,18 +26,31 @@ public class DetailActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
 
+    public static boolean twoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        if (findViewById(R.id.idLinearLayout) != null){
+
+            twoPane = true;
+
+
+        }else {
+            twoPane = false;
+        }
+
 
         Intent intent = getIntent();
 
             Bundle bundle = intent.getExtras();
+            bundle.putBoolean("two_pane",twoPane);
 
 
             this.setTitle(bundle.getString("name"));
+
 
 
 

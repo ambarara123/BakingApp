@@ -4,16 +4,21 @@
     android:orientation="vertical"
     >
 
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/cardview_light_background"
+        android:textColor="#fff"
         android:text="Ingradients"
         android:textSize="20sp"
         style="@style/TextAppearance.AppCompat.Large"
         android:padding="5dp"
         android:id="@+id/widgetName"
-        android:background="@color/colorPrimary"/>
+        android:background="#6e7c5a"/>
+
+
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

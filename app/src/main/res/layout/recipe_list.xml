@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#000"
+    android:layout_height="150dp"
+    android:background="@drawable/cake"
     android:layout_margin="5dp"
     android:id="@+id/relativelayout"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_gravity="center_horizontal">
 
     <TextView
@@ -14,8 +15,11 @@
         android:layout_margin="5dp"
         android:padding="3dp"
         android:id="@+id/recipeName"
-        android:textColor="#fff"
-        android:textSize="20sp"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_centerInParent="true"
+        android:textColor="#121d74"
+        android:textSize="40sp"
+        android:textStyle="bold"
         tools:text="Recipe Name"
         android:gravity="center"
         />

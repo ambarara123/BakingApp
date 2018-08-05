@@ -1,35 +1,42 @@
 package com.akumar.bakingapp;
 
 
-import android.app.Activity;
-import android.app.Dialog;
+
 import android.content.Context;
-import android.content.res.Configuration;
+
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.akumar.bakingapp.Utilities.Recipe;
 import com.android.bakingapp.R;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.squareup.picasso.Picasso;
@@ -40,20 +47,22 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DescriptionFragment extends Fragment {
+public class DescriptionFragment extends Fragment  {
 
     private SimpleExoPlayer simpleExoPlayer;
     private SimpleExoPlayerView simpleExoPlayerView;
     private int position;
     private ArrayList<Recipe.Steps> stepsArrayList;
-    private boolean isVideoPlaying;
-    private boolean twoPane = false;
-    long cursorPosition;
+    private boolean isVideoPlaying = false;
+    long cursorPosition = 0;
     MediaSource mediaSource;
     TextView shortDes,description;
-    private Dialog dialog;
-    private boolean mExoPlayerFullscreen = false;
-    private Activity activity;
+    private boolean twoPane ;
+    private PlaybackStateCompat.Builder mStateBuilder;
+    private static MediaSessionCompat mMediaSession;
+
+
+
 
 
 
@@ -64,6 +73,28 @@ public class DescriptionFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("create","create called");
+
+        Bundle bundle = getArguments();
+        if (savedInstanceState != null){
+            stepsArrayList = savedInstanceState.getParcelableArrayList("save_list");
+            position = savedInstanceState.getInt("save_posn");
+            cursorPosition = savedInstanceState.getLong("curposn");
+            isVideoPlaying = savedInstanceState.getBoolean("isplay");
+            Log.d("isPlay",String.valueOf(isVideoPlaying));
+            Log.d("curpon",String.valueOf(cursorPosition));
+
+
+        }else{
+
+            position = bundle.getInt("step_position");
+            stepsArrayList = bundle.getParcelableArrayList("step_arraylist");
+            twoPane = bundle.getBoolean("twopane");
+
+            Log.d("twoPane",String.valueOf(twoPane));
+
+
+        }
 
 
     }
@@ -71,7 +102,6 @@ public class DescriptionFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
     }
 
     @Override
@@ -81,22 +111,16 @@ public class DescriptionFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_description, container, false);
         simpleExoPlayerView = view.findViewById(R.id.exoPlayer);
 
-        Bundle bundle = getArguments();
 
 
+        if (!checkNetwork()){
+            simpleExoPlayerView.setVisibility(View.GONE);
+            Toast.makeText(getContext(), "video unavailable! please connect to a network", Toast.LENGTH_SHORT).show();
 
-        if (savedInstanceState != null){
-            stepsArrayList = savedInstanceState.getParcelableArrayList("save_list");
-            position = savedInstanceState.getInt("save_posn");
-            cursorPosition = savedInstanceState.getLong("cur_posn");
-
-        }else{
-
-            position = bundle.getInt("step_position");
-            stepsArrayList = bundle.getParcelableArrayList("step_arraylist");
-
-
+        }else {
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
         }
+
 
 
 
@@ -106,17 +130,28 @@ public class DescriptionFragment extends Fragment {
 
 
         if (simpleExoPlayer == null) {
+
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), new DefaultTrackSelector());
+
+
         }
         mediaSource = new ExtractorMediaSource(Uri.parse(stepsArrayList.get(position).getVideoURL())
                 , new DefaultDataSourceFactory(
+
                 getActivity(), "ambar"), new DefaultExtractorsFactory(), null, null);
+
+
+
         simpleExoPlayer.prepare(mediaSource);
-        simpleExoPlayer.setPlayWhenReady(true);
+                simpleExoPlayer.setPlayWhenReady(true);
 
-        int configuration = getResources().getConfiguration().orientation;
 
-        if(configuration == Configuration.ORIENTATION_LANDSCAPE){
+
+
+
+        final int configuration = getResources().getConfiguration().orientation;
+
+       /* if(configuration == Configuration.ORIENTATION_LANDSCAPE){
 
             Log.d("config","changed config");
 
@@ -143,7 +178,7 @@ public class DescriptionFragment extends Fragment {
 
 
         }
-
+*/
 
         if (stepsArrayList != null) {
 
@@ -153,7 +188,7 @@ public class DescriptionFragment extends Fragment {
             if (!stepsArrayList.get(position).getThumbnailURL().isEmpty()) {
 
 
-                ImageView imageView = (ImageView) view.findViewById(R.id.thumbnail_img);
+                ImageView imageView = view.findViewById(R.id.thumbnail_img);
                 imageView.setVisibility(View.VISIBLE);
 
                 Picasso.with(getContext())
@@ -162,8 +197,9 @@ public class DescriptionFragment extends Fragment {
                         .into(imageView);
 
             } else {
-                view.findViewById(R.id.no_thumbnail_tv).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.no_image).setVisibility(View.VISIBLE);
             }
+
 
             if (stepsArrayList.get(position).getVideoURL() != null && !stepsArrayList.get(position).getVideoURL().isEmpty()) {
                 isVideoPlaying = true;
@@ -172,10 +208,12 @@ public class DescriptionFragment extends Fragment {
                 isVideoPlaying = false;
                 (view.findViewById(R.id.exoPlayer)).setVisibility(View.GONE);
             }
-            Button button = (Button) view.findViewById(R.id.next_step_btn);
+            Button button = view.findViewById(R.id.next_step_btn);
+
             if (twoPane) {
                 button.setVisibility(View.GONE);
             } else {
+
 
                 if (position + 1 == stepsArrayList.size()) {
                     button.setVisibility(View.GONE);
@@ -192,6 +230,7 @@ public class DescriptionFragment extends Fragment {
                         if (isVideoPlaying) {
                             simpleExoPlayer.release();
                         }
+
 
                         position++;
 
@@ -213,7 +252,7 @@ public class DescriptionFragment extends Fragment {
                                     .into(imageView);
 
                         } else {
-                            view.findViewById(R.id.no_thumbnail_tv).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.no_image).setVisibility(View.VISIBLE);
                         }
 
 
@@ -222,15 +261,24 @@ public class DescriptionFragment extends Fragment {
 
                         if (!TextUtils.isEmpty(steps.getVideoURL())) {
 
-                            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), new DefaultTrackSelector());
+                            if (!checkNetwork()) {
+                                simpleExoPlayerView.setVisibility(View.GONE);
+                                isVideoPlaying = false;
+                                Toast.makeText(getContext(), "video unavailable! please connect to a network", Toast.LENGTH_SHORT).show();
+                            } else {
 
-                            MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(steps.getVideoURL()), new DefaultDataSourceFactory(
-                                    getActivity(), "ambar"), new DefaultExtractorsFactory(), null, null);
-                            simpleExoPlayer.prepare(mediaSource);
-                            simpleExoPlayer.setPlayWhenReady(true);
-                            isVideoPlaying = true;
-                            simpleExoPlayerView.setPlayer(simpleExoPlayer);
-                            simpleExoPlayerView.setVisibility(View.VISIBLE);
+                                simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), new DefaultTrackSelector());
+
+                                MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(steps.getVideoURL()), new DefaultDataSourceFactory(
+                                        getActivity(), "ambar"), new DefaultExtractorsFactory(), null, null);
+                                simpleExoPlayer.prepare(mediaSource);
+                                simpleExoPlayer.setPlayWhenReady(true);
+                                isVideoPlaying = true;
+                                simpleExoPlayerView.setPlayer(simpleExoPlayer);
+                                simpleExoPlayerView.setVisibility(View.VISIBLE);
+                            }
+
+
                         } else {
                             isVideoPlaying = false;
                             simpleExoPlayerView.setVisibility(View.GONE);
@@ -241,8 +289,8 @@ public class DescriptionFragment extends Fragment {
                 });
 
             }
-
         }
+
 
 
         return view;
@@ -252,28 +300,33 @@ public class DescriptionFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (simpleExoPlayer != null) {
-            cursorPosition = simpleExoPlayer.getCurrentPosition();
+            //cursorPosition = simpleExoPlayer.getCurrentPosition();
             simpleExoPlayer.stop();
         }
     }
 
-    private void releasePlayer() {
-        if (simpleExoPlayer != null) {
-            simpleExoPlayer.stop();
-            simpleExoPlayer.release();
-            simpleExoPlayer = null;
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
+        cursorPosition = simpleExoPlayer.getCurrentPosition();
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("resume","resume called");
         if (simpleExoPlayer != null) {
+
+            simpleExoPlayer.seekTo(cursorPosition);
+
+            simpleExoPlayer.prepare(mediaSource);
+            simpleExoPlayer.setPlayWhenReady(true);
+        }else if (isVideoPlaying){
             simpleExoPlayer.seekTo(cursorPosition);
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
         }
+
     }
 
 
@@ -284,7 +337,39 @@ public class DescriptionFragment extends Fragment {
 
         outState.putInt("save_posn",position);
         outState.putParcelableArrayList("save_list",stepsArrayList);
-        outState.putLong("cur_posn",cursorPosition);
+        outState.putLong("curposn",cursorPosition);
+        outState.putBoolean("isplay",isVideoPlaying);
 
     }
+
+    public boolean checkNetwork(){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+
+
+    private void releasePlayer() {
+        if (simpleExoPlayer != null) {
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+    }
+
+
+
+
+
+
 }

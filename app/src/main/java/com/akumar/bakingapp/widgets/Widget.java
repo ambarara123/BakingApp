@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.widget.RemoteViews;
 
 import com.akumar.bakingapp.Utilities.Recipe;
@@ -73,14 +74,19 @@ public class Widget extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.updated_layout);
 
             ArrayList<Recipe.Ingredients> ingredients = recipes.get(itemClicked).ingredients;
-            int i = 0;
-            String x = "";
+
+            String text = "";
+
             for (Recipe.Ingredients ingredient : ingredients) {
-                x = x + (++i) + ". " + ingredient.getIngredient().substring(0, 1).toUpperCase() + ingredient.getIngredient().substring(1) + " \n";
+                text = text  + ingredient.getIngredient().substring(0, 1).toUpperCase() +
+                        ingredient.getIngredient().substring(1) + " \n";
             }
 
-            views.setTextViewText(R.id.widget_title, recipes.get(itemClicked).getName() + " Ingredients");
-            views.setTextViewText(R.id.list_text, x);
+            views.setTextViewText(R.id.widget_title, recipes.get(itemClicked).getName() );
+            views.setTextViewText(R.id.list_text, text);
+
+
+
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }

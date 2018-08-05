@@ -35,6 +35,7 @@ public class StepsFragment extends Fragment {
     @BindView(R.id.ingradientRecycler)
     RecyclerView ingradientRecycler;
     IngradientAdapter ingradientAdapter;
+    boolean twoPane;
 
 
 
@@ -61,9 +62,11 @@ public class StepsFragment extends Fragment {
 
 
         Bundle bundle = getArguments();
-        String name = bundle.getString("name");
+
         ingredientsList = bundle.getParcelableArrayList("ingredients");
         stepsList = bundle.getParcelableArrayList("steps");
+        twoPane = bundle.getBoolean("two_pane");
+
 
 
         ingradientAdapter = new IngradientAdapter(getContext(),ingredientsList);
@@ -71,7 +74,7 @@ public class StepsFragment extends Fragment {
         ingradientRecycler.setHasFixedSize(true);
         ingradientRecycler.setAdapter(ingradientAdapter);
 
-        stepsAdapter = new StepsAdapter(getContext(),stepsList,fragmentManager);
+        stepsAdapter = new StepsAdapter(getContext(),stepsList,fragmentManager,twoPane);
         stepRecyclerView.setAdapter(stepsAdapter);
 
 

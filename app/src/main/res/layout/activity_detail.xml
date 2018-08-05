@@ -7,10 +7,10 @@
     tools:context="com.akumar.bakingapp.DetailActivity">
 
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/detail_fragment"></FrameLayout>
+        android:id="@+id/detail_fragment"
+        ></FrameLayout>
 
 </RelativeLayout>
