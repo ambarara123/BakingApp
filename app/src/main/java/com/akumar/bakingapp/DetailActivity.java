@@ -37,7 +37,6 @@ public class DetailActivity extends AppCompatActivity {
 
             twoPane = true;
 
-
         }else {
             twoPane = false;
         }
@@ -52,8 +51,7 @@ public class DetailActivity extends AppCompatActivity {
             this.setTitle(bundle.getString("name"));
 
 
-
-
+            
 
         /*if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);

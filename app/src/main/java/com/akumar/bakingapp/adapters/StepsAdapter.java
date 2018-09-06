@@ -42,7 +42,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        holder.stepName.setText(String.valueOf(position+1)+" "+steps.get(position).getShortDescription());
+        holder.stepName.setText("• "+steps.get(position).getShortDescription());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

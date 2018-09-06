@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -208,7 +209,7 @@ public class DescriptionFragment extends Fragment  {
                 isVideoPlaying = false;
                 (view.findViewById(R.id.exoPlayer)).setVisibility(View.GONE);
             }
-            Button button = view.findViewById(R.id.next_step_btn);
+            FloatingActionButton button = view.findViewById(R.id.next_step_btn);
 
             if (twoPane) {
                 button.setVisibility(View.GONE);

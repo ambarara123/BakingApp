@@ -34,7 +34,7 @@ public class IngradientAdapter extends RecyclerView.Adapter<IngradientAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.stepName.setText(ingredients.get(position).getIngredient());
+        holder.stepName.setText("• "+ingredients.get(position).getIngredient());
 
     }
 

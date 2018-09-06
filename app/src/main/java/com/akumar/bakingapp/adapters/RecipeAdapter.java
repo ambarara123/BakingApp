@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,7 +44,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        holder.recipeName.setText(recipeList.get(position).getName());
+       // holder.recipeName.setText(recipeList.get(position).getName());
+       /* holder.servingTextView.setText("Servings : "+ recipeList.get(position).getServings());
+        holder.recipeNameTextView.setText("Name : "+ recipeList.get(position).getName());*/
+        if (position == 0){
+            holder.imgRel.setBackgroundResource(R.drawable.nutella);
+        }else if (position==1){
+            holder.imgRel.setBackgroundResource(R.drawable.brownies);
+        }else if (position==2){
+            holder.imgRel.setBackgroundResource(R.drawable.yellow);
+        }else {
+            holder.imgRel.setBackgroundResource(R.drawable.cheese);
+        }
+
+
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,13 +92,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView recipeName;
-        RelativeLayout relativeLayout;
+        TextView servingTextView,recipeNameTextView;
+        CardView relativeLayout;
+        RelativeLayout imgRel;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            recipeName = itemView.findViewById(R.id.recipeName);
             relativeLayout = itemView.findViewById(R.id.relativelayout);
+            /*servingTextView = itemView.findViewById(R.id.servingTextView);
+            recipeNameTextView = itemView.findViewById(R.id.recipeNameTextView);*/
+            imgRel = itemView.findViewById(R.id.imageRel);
         }
     }
+
 }

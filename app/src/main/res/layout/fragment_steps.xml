@@ -4,17 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#412424"
+    android:background="@drawable/landing"
     android:clickable="true"
     tools:context=".StepsFragment">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Ingredients"
-        android:textSize="25dp"
-        android:gravity="center_horizontal"
-        android:textColor="#fff"
+        android:text="Ingredients :"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:textColor="#e0e0ed"
         android:id="@+id/ingradientTV"
         style="@style/TextAppearance.AppCompat.Large"
         />
@@ -25,9 +29,9 @@
         android:id="@+id/ingradientCard"
         android:foregroundGravity="center"
         android:layout_below="@+id/ingradientTV"
-        android:layout_margin="4dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp"
         app:cardElevation="5dp"
-        android:padding="3dp"
         >
 
 
@@ -35,21 +39,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/ingradientRecycler"
-            android:layout_margin="3dp"></android.support.v7.widget.RecyclerView>
+            ></android.support.v7.widget.RecyclerView>
 
     </android.support.v7.widget.CardView>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Steps"
-        android:layout_marginTop="3dp"
+        android:text="Steps :"
+        android:layout_marginTop="6dp"
         android:id="@+id/stepstv"
-        android:textColor="#fff"
-        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginLeft="15dp"
+        android:textColor="#e0e0ed"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/ingradientCard"
         style="@style/TextAppearance.AppCompat.Large"
-        android:textSize="25sp"/>
+        android:textSize="30sp"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
