@@ -64,9 +64,6 @@ public class DescriptionFragment extends Fragment  {
 
 
 
-
-
-
     public DescriptionFragment() {
         // Required empty public constructor
     }
@@ -121,8 +118,6 @@ public class DescriptionFragment extends Fragment  {
         }else {
             simpleExoPlayerView.setVisibility(View.VISIBLE);
         }
-
-
 
 
         shortDes =  view.findViewById(R.id.recipe_short);
@@ -210,17 +205,89 @@ public class DescriptionFragment extends Fragment  {
                 (view.findViewById(R.id.exoPlayer)).setVisibility(View.GONE);
             }
             FloatingActionButton button = view.findViewById(R.id.next_step_btn);
+            FloatingActionButton buttonBack = view.findViewById(R.id.back_btn);
 
             if (twoPane) {
                 button.setVisibility(View.GONE);
+                buttonBack.setVisibility(View.GONE);
             } else {
 
 
                 if (position + 1 == stepsArrayList.size()) {
                     button.setVisibility(View.GONE);
-                } else {
+                    buttonBack.setVisibility(View.VISIBLE);
+                } else if (position==0){
+                    buttonBack.setVisibility(View.GONE);
                     button.setVisibility(View.VISIBLE);
+                }else {
+                    button.setVisibility(View.VISIBLE);
+                    buttonBack.setVisibility(View.VISIBLE);
                 }
+
+                buttonBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isVideoPlaying) {
+                            simpleExoPlayer.release();
+                        }
+
+
+                        position--;
+
+
+                        if (position  == 0) {
+                            (view.findViewById(R.id.back_btn)).setVisibility(View.GONE);
+                        }else {
+                            (view.findViewById(R.id.back_btn)).setVisibility(View.VISIBLE);
+
+                        }
+
+                        Recipe.Steps steps = stepsArrayList.get(position);
+
+                        if (!steps.getThumbnailURL().isEmpty()) {
+
+                            ImageView imageView = view.findViewById(R.id.thumbnail_img);
+                            imageView.setVisibility(View.VISIBLE);
+
+                            Picasso.with(getContext())
+                                    .load(steps.getThumbnailURL())
+                                    .error(R.drawable.ic_launcher_background)
+                                    .into(imageView);
+
+                        } else {
+                            view.findViewById(R.id.no_image).setVisibility(View.VISIBLE);
+                        }
+
+
+                        shortDes.setText(steps.getShortDescription());
+                        description.setText(steps.getDescription());
+
+                        if (!TextUtils.isEmpty(steps.getVideoURL())) {
+
+                            if (!checkNetwork()) {
+                                simpleExoPlayerView.setVisibility(View.GONE);
+                                isVideoPlaying = false;
+                                Toast.makeText(getContext(), "video unavailable! please connect to a network", Toast.LENGTH_SHORT).show();
+                            } else {
+
+                                simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), new DefaultTrackSelector());
+
+                                MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(steps.getVideoURL()), new DefaultDataSourceFactory(
+                                        getActivity(), "ambar"), new DefaultExtractorsFactory(), null, null);
+                                simpleExoPlayer.prepare(mediaSource);
+                                simpleExoPlayer.setPlayWhenReady(true);
+                                isVideoPlaying = true;
+                                simpleExoPlayerView.setPlayer(simpleExoPlayer);
+                                simpleExoPlayerView.setVisibility(View.VISIBLE);
+                            }
+
+
+                        } else {
+                            isVideoPlaying = false;
+                            simpleExoPlayerView.setVisibility(View.GONE);
+                        }
+                    }
+                });
 
 
                 button.setOnClickListener(new View.OnClickListener() {
@@ -367,6 +434,8 @@ public class DescriptionFragment extends Fragment  {
         super.onDestroy();
         releasePlayer();
     }
+
+
 
 
 

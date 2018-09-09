@@ -27,7 +27,7 @@
         android:textColor="#e0e0ed"
         android:layout_marginTop="5dp"
         android:textSize="25sp"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="false" />
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/exoPlayer"
@@ -81,11 +81,17 @@
 
     </android.support.v7.widget.CardView>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_step_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:text="NEXT"
         android:backgroundTint="#685e5e"
@@ -93,6 +99,22 @@
         app:elevation="15dp"
         android:src="@drawable/ic_arrow_forward_white_24dp"
         android:visibility="visible" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:text="NEXT"
+                android:backgroundTint="#685e5e"
+                app:rippleColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                app:elevation="15dp"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:visibility="visible" />
+
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>
