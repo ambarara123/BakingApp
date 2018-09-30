@@ -204,6 +204,9 @@ public class DescriptionFragment extends Fragment  {
                 isVideoPlaying = false;
                 (view.findViewById(R.id.exoPlayer)).setVisibility(View.GONE);
             }
+
+
+
             FloatingActionButton button = view.findViewById(R.id.next_step_btn);
             FloatingActionButton buttonBack = view.findViewById(R.id.back_btn);
 
@@ -434,12 +437,6 @@ public class DescriptionFragment extends Fragment  {
         super.onDestroy();
         releasePlayer();
     }
-
-
-
-
-
-
 
 
 }
